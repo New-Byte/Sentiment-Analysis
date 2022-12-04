@@ -10,14 +10,15 @@ import pandas as pd
 
 lemmatizer = WordNetLemmatizer()
 print('Opening data.csv...')
-df = pd.read_csv('./data/book1.csv', encoding='latin-1')
+# utf-8
+df = pd.read_csv('./data/Book1.csv', encoding='latin-1')
 
-intents = df['intents'].tolist()
-patterns = df['patterns'].tolist()
+intents = df['intents'].tolist() #['c1', 'c2', ....]
+patterns = df['patterns'].tolist() #[4,0,2]
 
 print('Data.csv is read...')
 words = []
-classes = []
+classes = ["Undefined"]
 documents = []
 punctuations = ['?','!',',','.',';',':', '@', '#','$', '&', '*', '(', ')']
 tag = "Undefined"
@@ -38,7 +39,7 @@ while True:
     if tag not in classes:
         classes.append(tag)
     i += 1
-
+#Preparing, Prepared, Prepare
 print('Preparing the data for processing....')
 words = [lemmatizer.lemmatize(word) for word in words if word not in punctuations]
 words = sorted(set(words))
@@ -51,6 +52,8 @@ pickle.dump(classes, open("./data/classes.pkl", 'wb'))
 training = []
 output = [0] * len(classes)
 
+# bag = [1, 0, 1, 1] 4
+# output = [1, 0, 0]
 print('Processing the comments...')
 for document in documents:
 	bag = []
@@ -65,7 +68,9 @@ for document in documents:
 
 random.shuffle(training)
 training = np.array(training)
+#[[[1,0,1,1],[1,0,0]], []]
 
+# y = w1x1 + w2x2 + .... + b
 
 train_x = list(training[:,0])
 train_y = list(training[:,1])
